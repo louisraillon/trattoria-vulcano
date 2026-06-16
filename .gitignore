@@ -1,0 +1,15 @@
+# unrelated local projects living in this folder — do NOT ship
+/cousin resto/
+/gym/
+/montre/
+/plombier/
+
+# tooling / local artifacts
+.playwright-mcp/
+.claude/
+node_modules/
+.vercel
+*.log
+.DS_Store
+Thumbs.db
+models/globe.original.glb
