@@ -13,3 +13,5 @@ node_modules/
 .DS_Store
 Thumbs.db
 models/globe.original.glb
+
+.vercel
