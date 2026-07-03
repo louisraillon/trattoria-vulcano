@@ -1,16 +1,14 @@
 # Trattoria Vulcano — Cucina di Fuoco
 
-Site 3D immersif pour une trattoria sicilienne fictive (pièce portfolio).
-Scroll = la caméra traverse la salle : volcan par la fenêtre → salle → table → four à bois → cave à vins → réservation.
+Site parallaxe 2D pour une trattoria sicilienne fictive (pièce portfolio).
+Couches d'images animées au scroll + pointeur pour simuler la profondeur — zéro WebGL.
 
 ## Stack
 
-- Vite + React 19
-- Three.js + React Three Fiber + drei + postprocessing (bloom, vignette)
-- Zustand (état partagé DOM ↔ 3D)
-- Scène procédurale + 3 textures CC0 d'[ambientCG](https://ambientcg.com) (Tiles012, Plaster001, WoodFloor064 — aucune attribution requise)
-- OG image capturée depuis le rendu réel (`public/img/og.jpg`)
-- Four 3D généré par Hunyuan-3D à partir d'une photo CC BY : [« Wood Fired Pizza Oven »](https://www.flickr.com/photos/58433307@N08/15001475025) (Flickr, CC BY 2.0)
+- Vite + React 19 (+ zustand) — **~65 kB gzip au total**
+- Moteur parallaxe maison : 1 rAF par scène, tué hors écran (IntersectionObserver), transforms GPU uniquement
+- Assets images générés par IA — spec complète dans [layers-spec.md](layers-spec.md)
+- Placeholders automatiques : chaque couche manquante affiche son nom de fichier — déposer le PNG/JPG dans `public/layers/`, refresh, terminé
 
 ## Commandes
 
@@ -22,31 +20,23 @@ npm run build    # dist/
 
 ## Interactions
 
-- **Scroll** : trajet caméra amorti à travers la scène
-- **Souris** : parallaxe caméra
-- **Survol menu (DOM)** : le plat correspondant s'anime sur la table 3D (et inversement, survol 3D → tooltip)
-- **Clic sur le volcan** : éruption (secousse caméra, braises ×4)
-- **Bouton bas-droit** : bascule mode "flat" sans 3D (activé d'office si `prefers-reduced-motion`)
+- **Scroll** : couches translatées à vitesses différentes (profondeur simulée)
+- **Pointeur** : parallaxe subtile x/y sur toutes les couches
+- **Survol menu** : le plat correspondant se soulève de la table (cutout PNG)
+- **Clic sur le volcan** (hero) : éruption — secousse + flash de lave
+- Braises CSS animées (hero, forno, prenota)
 
 ## Accessibilité / perf
 
-- Sections DOM réelles (SEO, lecteurs d'écran), skip-link, focus visible
-- `prefers-reduced-motion` → mode flat par défaut, marquee stoppé
-- Post-processing et étoiles réduits sous 768 px, DPR plafonné
-- Chunks séparés three / r3f / app (~195 kB gzip au total pour three+r3f)
+- Sections DOM réelles, skip-link, focus visible
+- `prefers-reduced-motion` → parallaxe désactivée, contenu statique complet
+- Aucune animation JS hors écran ; embers = CSS compositor only
+- `og:image` : `public/img/og.jpg` (à recapturer une fois les couches finales en place)
 
-## Assets optionnels (non requis, mais si tu veux monter le niveau)
+## Historique
 
-Le site fonctionne sans aucun asset. Pour aller plus loin, fournir :
-
-| Asset | Spécification | Usage |
-|-------|--------------|-------|
-| Image OG | 1200×630 JPG < 200 kB, capture du hero | `og:image` (absente pour l'instant) |
-| Modèles 3D plats | GLB < 500 kB/pièce, ~2k tris, textures 1024² compressées (KTX2 idéalement) | Remplacer pizza/pasta/arancini procéduraux |
-| Modèle four à bois | GLB < 1 Mo, pivot au sol | Remplacer le dôme procédural |
-| Ambiance sonore | MP3/OGG < 300 kB en boucle (feu qui crépite, salle) | Toggle son (à implémenter) |
-| Photos plats | Inutiles en l'état — le parti pris est 100 % 3D graphique | Mode flat, si souhaité |
+La v1 était une scène 3D Three.js/R3F complète (volcan, salle, four Hunyuan-3D) — remplacée par ce système 2D parallaxe pour la performance et la direction artistique. Voir l'historique git (`git log`) pour la version 3D.
 
 ## Déploiement
 
-Vercel : framework auto-détecté (Vite), `vercel.json` fournit CSP + cache immutable des assets.
+Vercel : auto-détection Vite, `vercel.json` fournit CSP + cache des assets.
