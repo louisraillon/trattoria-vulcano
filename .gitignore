@@ -4,14 +4,14 @@
 /montre/
 /plombier/
 
+# build / deps
+node_modules/
+dist/
+
 # tooling / local artifacts
 .playwright-mcp/
 .claude/
-node_modules/
 .vercel
 *.log
 .DS_Store
 Thumbs.db
-models/globe.original.glb
-
-.vercel
