@@ -10,6 +10,7 @@ Scroll = la caméra traverse la salle : volcan par la fenêtre → salle → tab
 - Zustand (état partagé DOM ↔ 3D)
 - Scène procédurale + 3 textures CC0 d'[ambientCG](https://ambientcg.com) (Tiles012, Plaster001, WoodFloor064 — aucune attribution requise)
 - OG image capturée depuis le rendu réel (`public/img/og.jpg`)
+- Four 3D généré par Hunyuan-3D à partir d'une photo CC BY : [« Wood Fired Pizza Oven »](https://www.flickr.com/photos/58433307@N08/15001475025) (Flickr, CC BY 2.0)
 
 ## Commandes
 
