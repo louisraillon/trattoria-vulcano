@@ -1,5 +1,9 @@
-import { useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import Experience from './scene/Experience'
+
+// dev tuning stage for GLB placement: open /?tune
+const TuneScene = lazy(() => import('./scene/TuneScene'))
+const isTune = new URLSearchParams(window.location.search).has('tune')
 import Nav from './ui/Nav'
 import DishTip from './ui/DishTip'
 import { Hero, Storia, Menu, Forno, Vini, Prenota } from './ui/Sections'
@@ -36,6 +40,16 @@ export default function App() {
       window.removeEventListener('resize', onScroll)
     }
   }, [])
+
+  if (isTune) {
+    return (
+      <div style={{ position: 'fixed', inset: 0 }}>
+        <Suspense fallback={null}>
+          <TuneScene />
+        </Suspense>
+      </div>
+    )
+  }
 
   return (
     <>
